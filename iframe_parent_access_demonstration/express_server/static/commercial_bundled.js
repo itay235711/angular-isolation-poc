@@ -1,0 +1,2 @@
+var innerHtml = '<div style="border-style:solid;border-width:5px;border-color:blue;"><h2><font color="red"><center>Buy ice cream!</center></font></h2><p id="toBeFilled"></p></div><script>var p = document.getElementById("toBeFilled");var testCode = "window.parent.a = 1;";var evalResult;try {evalResult = eval(testCode);}catch (e) {evalResult = JSON.stringify(e);}p.innerHTML = "Trying to eval (" + testCode + "). Result:<br>" + evalResult;</script>';
+$("body").append(innerHtml);

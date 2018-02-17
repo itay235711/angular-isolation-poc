@@ -1,0 +1,132 @@
+<!-- <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular.min.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js'></script> -->
+
+<link rel="stylesheet" href="styles/dist.css">
+
+<script>window.enableIframesLoad = true;</script>
+
+<script id="template1" type="x-tmpl">
+
+	<head>
+		<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular.min.js'>&lt;/script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-animate.min.js">&lt;/script>	
+	    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-aria.min.js">&lt;/script>	
+	    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js">&lt;/script>	
+		<script src='injected.js'>&lt;/script>	
+
+	</head>
+
+</script>
+
+<script id="template2" type="x-tmpl">
+
+	<head>
+		<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js'>&lt;/script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js">&lt;/script>	
+	    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js">&lt;/script>	
+	    <script src="https://gitcdn.link/repo/angular/bower-material/master/angular-material.js">&lt;/script>	    
+		<script src='injected2.js'>&lt;/script>
+	</head>
+
+</script>
+
+<body>	
+	<div id="container1">
+		<div class="my-bordered">
+			<div ng-controller="MyController">
+				<h2>{{welcome}} angular version: {{ngVersion}}</h2>
+				<md-button class="md-raised" ng-click="increaseclicksCounter()">angular material version: 1.1.4</md-button>
+			</div>
+		</div>
+	</div>
+	<div id="container2">
+		<div class="my-bordered">
+			<div ng-controller="MyController">
+				<h2>{{welcome}} angular version: {{ngVersion}}</h2>
+				<md-button class="md-raised" ng-click="increaseclicksCounter()">angular material version: 1.1.5</md-button>
+			</div>
+		</div>
+	</div>	
+
+</body>
+
+<script>
+	(function() {
+	if (!window.enableIframesLoad)
+		return;
+
+	function initIFrame(templaeId){
+		var iframe = document.createElement('iframe');
+		var html = document.querySelector(templaeId).innerHTML.replace(/&lt;/g, '<');
+		iframe.style.visibility = "hidden";
+		iframe.style.width = "0px";
+		iframe.style.height = "0px";
+		iframe.style.position = "absolute";
+		iframe.style.top = "0";
+		iframe.style.left = "0";
+		document.body.appendChild(iframe);
+		iframe.contentWindow.document.open();
+		iframe.contentWindow.document.write(html);
+		iframe.contentWindow.document.close();
+
+		return iframe.contentWindow;
+	}
+		
+	window.onload = (function(pre) {
+		return function(){
+			pre && pre.apply(this,arguments);
+			initIFrame("#template1").onload = function() {
+
+				angular1.module('myApp', ['ngMaterial'])
+			    .controller('MyController', ['$scope', '$compile', function ($scope, $compile) {
+			        $scope.welcome = 'Hello World!';
+			        $scope.ngVersion = window.angular1.version.full;
+			        $scope.clicksCounter = 0;
+			        $scope.increaseclicksCounter = function() {
+						$scope.clicksCounter++;
+
+						var container1 = document.getElementById('container1');
+						if (!container1.counterDisplayElementAdded) {
+							var innerCotainer = container1.querySelector('.my-bordered');
+							var counterDisplayElement = ($compile('<h4>Clicks count: {{clicksCounter}}</h4>'))($scope)[0];							
+							innerCotainer.appendChild(counterDisplayElement);
+							container1.counterDisplayElementAdded = true;
+						}
+			        }
+    			}]);
+
+    			window.angular1.element(document).ready(function() {
+				    window.angular1.bootstrap(document.getElementById('container1'), ['myApp']);
+				});
+
+				// , 'ngMaterial'
+			};
+			
+			initIFrame("#template2").onload = function() {
+				angular2.module('myApp', ['ngMaterial'])
+			    .controller('MyController', ['$scope', '$compile', function ($scope, $compile) {
+			        $scope.welcome = 'Hello World!';
+			        $scope.ngVersion = window.angular2.version.full;
+			        $scope.clicksCounter = 0;
+			        $scope.increaseclicksCounter = function() {
+						$scope.clicksCounter++;
+
+						var container2 = document.getElementById('container2');
+						if (!container2.counterDisplayElementAdded) {
+							var innerCotainer = container2.querySelector('.my-bordered');
+							var counterDisplayElement = ($compile('<h4>Clicks count: {{clicksCounter}}</h4>'))($scope)[0];
+							innerCotainer.appendChild(counterDisplayElement);
+							container2.counterDisplayElementAdded = true;
+						}
+			        }
+    			}]);
+
+    			angular2.element(window.parent.document).ready(function() {
+				    angular2.bootstrap(document.getElementById('container2'), ['myApp']);
+				});				
+			};
+		};
+	})(window.onload);
+
+})();
+</script>

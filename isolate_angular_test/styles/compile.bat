@@ -1,0 +1,1 @@
+lessc allTeamsStylesList.less dist.css

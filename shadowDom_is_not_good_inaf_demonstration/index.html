@@ -1,0 +1,27 @@
+<html>
+	<head>
+	</head>
+	<body>		
+		<div id="shadowDomContainer"></div>
+		<script>window.a = 1;</script>
+		<script>
+			var root = document.querySelector('#shadowDomContainer').createShadowRoot();
+
+			var simpleScript = document.createElement('script');
+		    simpleScript.setAttribute('type', 'text/javascript');
+		    simpleScript.innerText = "console.log('I know that window.a = ' + window.a); window.b = 2;";
+		    root.appendChild(simpleScript);
+
+		 	var angularScript = document.createElement('script');
+		    angularScript.setAttribute('type', 'text/javascript');
+		    angularScript.setAttribute('src', 'angular.min.js'); 
+		    // script.setAttribute('src', 'more_angular.min.js');
+			root.appendChild(angularScript);
+		</script>
+
+		<script src="angular.min.js"></script>
+		<script>
+			console.log('I know that window.b = ' + window.b);
+		</script>
+	</body>
+</html>
